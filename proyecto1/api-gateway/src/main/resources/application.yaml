@@ -1,0 +1,34 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/users/**
+          filters:
+            - AuthFilter
+
+        - id: qualification-service
+          uri: lb://qualification-service
+          predicates:
+            - Path=/qualifications/**
+
+        - id: hotel-service
+          uri: lb://hotel-service
+          predicates:
+            - Path=/hotels/**
+
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+
+
+  config:
+    import: optional:configserver:http://localhost:8086
